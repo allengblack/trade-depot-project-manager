@@ -1,4 +1,5 @@
 import { Document, Schema } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ProductDTO {
   name: string;
@@ -16,6 +17,11 @@ export interface Product extends Document {
 }
 
 export const ProductSchema: Schema = new Schema({
+  _id: {
+    type: String, default: function genUUID() {
+      return uuidv4()
+    }
+  },
   name: { type: String, required: true },
   user: { type: String, required: true },
   image: { type: String, required: true },

@@ -1,4 +1,5 @@
 import { Document, Schema } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface User extends Document {
   email: string;
@@ -25,6 +26,11 @@ export interface LoginDTO {
 }
 
 export const UserSchema: Schema = new Schema({
+  _id: {
+    type: String, default: function genUUID() {
+      return uuidv4()
+    }
+  },
   email: { type: String, required: true },
   phone: { type: String, required: true },
   name: { type: String, required: true },
