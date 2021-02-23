@@ -9,4 +9,4 @@ To easily test this, comments have been created by the user with the email "trad
 Create a new User, get your login credentials and then reply to any of the aforementioned users's comments and then you can easily view emails received at this address by visiting https://www.mailinator.com and entering that email in the "search" bar.
 
 Endpoints have been provided to create and view Users, Products and Comments.
-These endpoints are documented in the Postman collection [here]("https://www.getpostman.com/collections/aaef7fcfc78044ad4185").
+These endpoints are documented in the Postman collection [here](https://www.getpostman.com/collections/aaef7fcfc78044ad4185).
