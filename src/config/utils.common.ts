@@ -47,23 +47,28 @@ export function validate(
 }
 
 export const authenticate = (req, _res, next) => {
+  console.log("I got here!!!!!!!!!!!!!")
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
     next(new UnauthorizedError("No token sent in request"));
   }
 
+  console.log("I got to stage 2!!!!!!!!!!!!!")
   const header = authHeader.split(' ');
   const token = header[1];
 
   try {
     const decoded = jwt.verify(token, process.env.SECURITY_HASH);
     req.user = decoded;
+    console.log("I got to stage 3!!!!!!!!!!!!!")
     next();
   } catch (err) {
     console.error(err)
     if (err instanceof TokenExpiredError) {
+      console.log("I got to stage 5!!!!!!!!!!!!!")
       next(new ForbiddenError("Invalid Token"));
     }
+    console.log("I got to stage 6!!!!!!!!!!!!!")
     next(err);
   }
 }

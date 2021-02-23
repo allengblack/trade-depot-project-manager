@@ -38,6 +38,7 @@ export class ProductsController implements interfaces.Controller {
   @httpGet("/", authenticate)
   async getProducts(@request() req: Request, @response() res: Response) {
     try {
+      console.log(req.user);
       const products = await Products.find({
         location: {
           $geoIntersects: {
@@ -45,6 +46,8 @@ export class ProductsController implements interfaces.Controller {
           }
         }
       });
+      console.log(products.length)
+      console.log(products);
 
       res.json({ status: "success", data: products })
     } catch (error) {
