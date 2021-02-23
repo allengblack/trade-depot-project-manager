@@ -1,0 +1,42 @@
+{
+  "name": "trade-depot-project-manager",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "repository": "https://github.com/allengblack/trade-depot-project-manager.git",
+  "author": "Gbolahan Allen <allengblack@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./dist",
+    "start:dev": "nodemon ./dist",
+    "compile": "tsc",
+    "watch": "tsc --watch -p ./tsconfig.json",
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http-status-codes": "^2.1.4",
+    "inversify": "^5.0.5",
+    "inversify-express-utils": "^6.3.2",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "5.11.15",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.10.3",
+    "@types/morgan": "^1.9.2",
+    "@types/multer": "^1.4.5",
+    "@types/node": "^14.14.21",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.1.3"
+  }
+}
