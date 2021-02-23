@@ -49,7 +49,7 @@ export function validate(
 export const authenticate = (req, _res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
-    throw new UnauthorizedError("No token sent in request");
+    next(new UnauthorizedError("No token sent in request"));
   }
 
   const header = authHeader.split(' ');
@@ -62,8 +62,8 @@ export const authenticate = (req, _res, next) => {
   } catch (err) {
     console.error(err)
     if (err instanceof TokenExpiredError) {
-      throw new ForbiddenError("Invalid Token");
+      next(new ForbiddenError("Invalid Token"));
     }
-    throw err;
+    next(err);
   }
 }
