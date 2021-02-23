@@ -6,6 +6,12 @@ import { authenticate } from '../config/utils.common';
 import { Comments } from '../data/comment/comment.model';
 import { CommentDTO } from "../data/comment/comment.schema";
 import { NotFoundError } from '../data/errors';
+import { transport } from '../services/messages';
+import dotenv from 'dotenv';
+// import axios from 'axios';
+import { Users } from '../data/user/user.model';
+
+dotenv.config();
 
 @controller("/comments")
 export class CommentsController implements interfaces.Controller {
@@ -18,10 +24,47 @@ export class CommentsController implements interfaces.Controller {
       reply_to: body.reply_to
     });
 
-    res.status(201).json({
-      status: "success",
-      data: body
-    })
+    if (body.reply_to) {
+      const origin = await Comments.findById(body.reply_to);
+      const owner = await Users.findOne({ _id: origin.user });
+
+      console.log({ user: req.user, owner, origin })
+      if (owner._id === req.user.id) {
+        return;
+      } else {
+        const message = `${req.user.name} replied to your comment: "${body.message}"`;
+
+        transport.sendMail({
+          from: process.env.MAILTRAP_FROM,
+          to: owner.email,
+          subject: 'Design Your Model S | Tesla',
+          text: message
+        });
+
+        // axios.post(process.env.NEXMO_URL, {
+        //   from: { "type": "whatsapp", "number": process.env.NEXMO_FROM },
+        //   to: { "type": "whatsapp", "number": owner.phone },
+        //   message: {
+        //     "content": {
+        //       "type": "text",
+        //       "text": message
+        //     }
+        //   }
+        // }, {
+        //   auth: {
+        //     username: process.env.NEXMO_KEY,
+        //     password: process.env.NEXMO_SECRET
+        //   }
+        // })
+        //   .catch(err => { console.error(err.message); })
+      }
+    }
+
+    res.status(201)
+      .json({
+        status: "success",
+        data: body
+      })
   }
 
   @httpGet("/")

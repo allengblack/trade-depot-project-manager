@@ -55,7 +55,8 @@ export class UsersController implements interfaces.Controller {
         id: user._id,
         email: user.email,
         name: user.name,
-        location: user.location
+        location: user.location,
+        phone: user.phone
       }, process.env.SECURITY_HASH, {
         expiresIn: process.env.TOKEN_EXPIRY,
       });
