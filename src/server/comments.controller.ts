@@ -6,9 +6,7 @@ import { authenticate } from '../config/utils.common';
 import { Comments } from '../data/comment/comment.model';
 import { CommentDTO } from "../data/comment/comment.schema";
 import { NotFoundError } from '../data/errors';
-// import { transport } from '../services/messages';
 import dotenv from 'dotenv';
-// import axios from 'axios';
 import { Users } from '../data/user/user.model';
 import { gunner } from "../services/messages";
 
@@ -29,48 +27,19 @@ export class CommentsController implements interfaces.Controller {
       const origin = await Comments.findById(body.reply_to);
       const owner = await Users.findOne({ _id: origin.user });
 
-      console.log({ user: req.user, owner, origin })
       if (owner._id === req.user.id) {
         return;
       } else {
         const message = `${req.user.name} replied to your comment: "${body.message}"`;
 
-        // transport.sendMail({
-        //   from: process.env.MAILTRAP_FROM,
-        //   to: owner.email,
-        //   subject: 'A Reply To Your Comment',
-        //   text: message
-        // });
-
-
         const data = {
           from: 'Admin <tradedepottest@sandbox72fb9a060c11490c950d2c0f6aec76ac.mailgun.org>',
           to: 'allengblack@gmail.com,	tradedepotinterview@mailinator.com',
-          subject: 'Hi',
+          subject: 'A Reply To Your Comment',
           text: message
         };
 
-
-        gunner.messages().send(data, (error, body) => {
-          console.log(body);
-        });
-
-        // axios.post(process.env.NEXMO_URL, {
-        //   from: { "type": "whatsapp", "number": process.env.NEXMO_FROM },
-        //   to: { "type": "whatsapp", "number": owner.phone },
-        //   message: {
-        //     "content": {
-        //       "type": "text",
-        //       "text": message
-        //     }
-        //   }
-        // }, {
-        //   auth: {
-        //     username: process.env.NEXMO_KEY,
-        //     password: process.env.NEXMO_SECRET
-        //   }
-        // })
-        //   .catch(err => { console.error(err.message); })
+        gunner.messages().send(data, (error, body) => { });
       }
     }
 
