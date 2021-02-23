@@ -47,4 +47,11 @@ export class ProductsController implements interfaces.Controller {
 
     res.json({ status: "success", data: products });
   }
+
+  @httpGet("/open")
+  async getAllProducts(@request() req: Request, @response() res: Response) {
+    const products = await Products.find({});
+
+    res.json({ status: "success", data: products });
+  }
 }
