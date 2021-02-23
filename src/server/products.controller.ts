@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 import { controller, httpGet, httpPost, interfaces, request, requestBody, response } from "inversify-express-utils";
 import { Request, Response } from "express";
-import { uploader } from '../services/uploads';
+import { cloudinaryMiddleware, uploader } from '../services/uploads';
 import { Products } from '../data/product/product.model';
 import { authenticate } from '../config/utils.common';
 import { ProductDTO } from '../data/product/product.schema';
@@ -10,7 +10,7 @@ import { db } from '../services/firestore';
 
 @controller("/products")
 export class ProductsController implements interfaces.Controller {
-  @httpPost("/", authenticate, uploader)
+  @httpPost("/", authenticate, uploader.single("image"), cloudinaryMiddleware)
   async createProduct(@request() req: Request, @response() res: Response, @requestBody() body: ProductDTO) {
     const product = await Products.create({
       name: body.name,
@@ -23,9 +23,11 @@ export class ProductsController implements interfaces.Controller {
 
     const ref = db.collection("products").doc(product._id);
     ref.set({
+      id: product._id,
       name: product.name,
       location: JSON.stringify(product.location),
-      user: product.user
+      user: product.user,
+      image: product.image
     })
       .catch(err => {
         console.error("Error syncing to Firestore: " + err)
