@@ -6,10 +6,11 @@ import { authenticate } from '../config/utils.common';
 import { Comments } from '../data/comment/comment.model';
 import { CommentDTO } from "../data/comment/comment.schema";
 import { NotFoundError } from '../data/errors';
-import { transport } from '../services/messages';
+// import { transport } from '../services/messages';
 import dotenv from 'dotenv';
 // import axios from 'axios';
 import { Users } from '../data/user/user.model';
+import { gunner } from "../services/messages";
 
 dotenv.config();
 
@@ -34,11 +35,24 @@ export class CommentsController implements interfaces.Controller {
       } else {
         const message = `${req.user.name} replied to your comment: "${body.message}"`;
 
-        transport.sendMail({
-          from: process.env.MAILTRAP_FROM,
-          to: owner.email,
-          subject: 'Design Your Model S | Tesla',
+        // transport.sendMail({
+        //   from: process.env.MAILTRAP_FROM,
+        //   to: owner.email,
+        //   subject: 'A Reply To Your Comment',
+        //   text: message
+        // });
+
+
+        const data = {
+          from: 'Admin <tradedepottest@sandbox72fb9a060c11490c950d2c0f6aec76ac.mailgun.org>',
+          to: 'allengblack@gmail.com,	tradedepotinterview@mailinator.com',
+          subject: 'Hi',
           text: message
+        };
+
+
+        gunner.messages().send(data, (error, body) => {
+          console.log(body);
         });
 
         // axios.post(process.env.NEXMO_URL, {
